@@ -5,9 +5,11 @@ import { RouteNames } from './RouteNames';
 //import pages and layouts
 import Homepage from "../pages/Homepage";
 import ReviewDetails from "../pages/ReviewDetails";
-import Category from "../pages/Category";
+import Contact from "../pages/Contact";
 import HeaderView from "../components/common/HeaderView";
 import FooterView from '../components/common/FooterView';
+import Registration from '../components/accounts/registration/Registration';
+import Login from '../components/accounts/login/Login';
 
 
 const Routes = () => {
@@ -18,7 +20,9 @@ const Routes = () => {
         <AppRoutes>
             <Route exact path={RouteNames.HomePage} element={<Homepage/>}/>
             <Route path={RouteNames.ReviewDetails} element={<ReviewDetails/>}/>
-            <Route path={RouteNames.Category} element={<Category/>}/>
+            <Route path={RouteNames.Contact} element={<Contact/>}/>
+            <Route path={RouteNames.Registration} element={<Registration/>}/>
+            <Route path={RouteNames.Login} element={<Login/>}/>
         </AppRoutes>
         <FooterView/>
     </div>

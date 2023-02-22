@@ -1,5 +1,7 @@
 export const RouteNames = {
     HomePage:'/',
-    ReviewDetails:'/details/:id',
-    Category:'/category/:id'
+    ReviewDetails:'/details',
+    Contact:'/contact',
+    Registration:'/registration',
+    Login:'/login'
 }

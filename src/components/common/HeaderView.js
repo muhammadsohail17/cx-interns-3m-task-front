@@ -19,9 +19,14 @@ const HeaderView = () => {
                     ReviewDetails
                 </NavLink>
               </li>
-              <li>
-                <NavLink to={RouteNames.Category} className="text-gray-100 hover:text-gray-300">
+              <li className="mr-6">
+                <NavLink to={RouteNames.Contact} className="text-gray-100 hover:text-gray-300">
                 Contact
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to={RouteNames.Login} className="text-gray-100 hover:text-gray-300">
+                Logout
                 </NavLink>
               </li>
             </ul>
