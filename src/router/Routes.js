@@ -4,7 +4,7 @@ import { RouteNames } from './RouteNames';
 
 //import pages and layouts
 import Homepage from "../pages/Homepage";
-import ReviewDetails from "../pages/ReviewDetails";
+import CreateTask from '../pages/CreateTask';
 import Contact from "../pages/Contact";
 import HeaderView from "../components/common/HeaderView";
 import FooterView from '../components/common/FooterView';
@@ -19,7 +19,7 @@ const Routes = () => {
         <HeaderView/>
         <AppRoutes>
             <Route exact path={RouteNames.HomePage} element={<Homepage/>}/>
-            <Route path={RouteNames.ReviewDetails} element={<ReviewDetails/>}/>
+            <Route path={RouteNames.CreateTask} element={<CreateTask/>}/>
             <Route path={RouteNames.Contact} element={<Contact/>}/>
             <Route path={RouteNames.Registration} element={<Registration/>}/>
             <Route path={RouteNames.Login} element={<Login/>}/>

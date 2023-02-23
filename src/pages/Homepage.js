@@ -13,20 +13,20 @@ const Homepage = () => {
     const [requirementsPerPage] = useState(5);
   
     // Load data from API when component mounts
-    useEffect(() => {
-      fetchData();
-    }, []);
+    // useEffect(() => {
+    //   fetchData();
+    // }, []);
   
     // Fetch requirements and projects data from API
-    const fetchData = async () => {
-      const requirementsResponse = requirements;
-      const requirementsData = await requirementsResponse;
-      setRequirements(requirementsData);
+    // const fetchData = async () => {
+    //   const requirementsResponse = requirements;
+    //   const requirementsData = await requirementsResponse;
+    //   setRequirements(requirementsData);
   
-      const projectsResponse = requirements;
-      const projectsData =  projectsResponse;
-      setProjects(projectsData);
-    };
+    //   const projectsResponse = requirements;
+    //   const projectsData =  projectsResponse;
+    //   setProjects(projectsData);
+    // };
   
     // Define function to handle status change
     const handleChangeStatus = (requirementId, newStatus) => {

@@ -1,8 +1,14 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { Common} from '../../../utils/common';
+import { messages } from '../../../utils/messages';
 
 const Login = () => {
+    
+    const navigate = useNavigate();
     const initialValues = {
         email: "",
         password: "",
@@ -17,7 +23,20 @@ const Login = () => {
     
       const onSubmit = (values) => {
         console.log(values);
-        console.log("submit");
+        axios
+        .post('http://localhost:1337/api/logins',{
+          data : {Email:values.email, Password:values.password}
+        })
+        .then(response => {
+          console.log(response.data);
+          const success = response.data;
+
+          if(success){
+              navigate('/')
+          } else {
+            Common.showErrorMessage(messages.invalid)
+          }
+        });
       };
     
       return (

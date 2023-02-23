@@ -1,6 +1,6 @@
 export const RouteNames = {
     HomePage:'/',
-    ReviewDetails:'/details',
+    CreateTask:'/createtask',
     Contact:'/contact',
     Registration:'/registration',
     Login:'/login'
