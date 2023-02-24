@@ -31,8 +31,11 @@ function Registration() {
   })
   .then(response => {
     console.log(response);
-    navigate('/login')
-  });
+    navigate('/')
+  })
+  .catch(error => {
+    console.log('Error posting data to API:', error);
+  })
   };
 
   return (

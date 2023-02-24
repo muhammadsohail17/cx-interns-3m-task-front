@@ -22,21 +22,21 @@ const Login = () => {
       });
     
       const onSubmit = (values) => {
-        console.log(values);
         axios
         .post('http://localhost:1337/api/logins',{
           data : {Email:values.email, Password:values.password}
         })
         .then(response => {
-          console.log(response.data);
-          const success = response.data;
-
+            const success = response.data;
           if(success){
               navigate('/')
           } else {
-            Common.showErrorMessage(messages.invalid)
+            console.log("Error");
           }
-        });
+        })
+        .catch(error => {
+            console.log('Error Fetching data from API:', error);
+          })
       };
     
       return (
@@ -102,7 +102,7 @@ const Login = () => {
                     type="submit"
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   >
-                    Submit
+                    Login
                   </button>
                 </div>
               </Form>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { requirements } from '../utils/constants';
+import axios from 'axios';
 
 
 
@@ -7,26 +7,25 @@ const Homepage = () => {
     const [requirements, setRequirements] = useState([]);
     const [projects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState('');
+    const [data, setData] = useState([]);
   
     // Define initial state for pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [requirementsPerPage] = useState(5);
   
-    // Load data from API when component mounts
-    // useEffect(() => {
-    //   fetchData();
-    // }, []);
-  
-    // Fetch requirements and projects data from API
-    // const fetchData = async () => {
-    //   const requirementsResponse = requirements;
-    //   const requirementsData = await requirementsResponse;
-    //   setRequirements(requirementsData);
-  
-    //   const projectsResponse = requirements;
-    //   const projectsData =  projectsResponse;
-    //   setProjects(projectsData);
-    // };
+    //Load data from API when component mounts
+    useEffect(() => {
+      axios
+        .get('http://localhost:1337/api/tasks')
+        .then(response => {
+            const success = response.data.data;
+            setData(success)
+            console.log(success);
+        })
+        .catch(error => {
+          console.log('Error fetching data from API:', error);
+        })
+    }, []);
   
     // Define function to handle status change
     const handleChangeStatus = (requirementId, newStatus) => {
@@ -67,8 +66,7 @@ const Homepage = () => {
     for (let i = 1; i <= totalPages; i++) {
       pageNumbers.push(i);
     }
-  
-    // Render the requirements table
+
     return (
       <>
         <header>
@@ -102,28 +100,31 @@ const Homepage = () => {
             <th className="px-4 py-2">Title</th>
             <th className="px-4 py-2">Status</th>
             <th className="px-4 py-2">Project</th>
-            <th className="px-4 py-2">Actions</th>
+            <th className="px-4 py-2">dueDate</th>
+            {/* <th className="px-4 py-2">Actions</th> */}
           </tr>
         </thead>
         <tbody className="bg-white">
-          {filteredRequirements.map(requirement => (
+          {data.map(requirement => (
             <tr key={requirement.id}>
               <td className="border px-4 py-2">{requirement.id}</td>
-              <td >{requirement.title}</td>
-              <td>
+              <td className="border px-4 py-2">{requirement.attributes.Title}</td>
+              <td className="border px-4 py-2">
                 <select
-                  value={requirement.status}
+                  value={requirement.attributes.Status}
                   onChange={e => handleChangeStatus(requirement.id, e.target.value)}
                 >
                   <option value="pending">Pending</option>
                   <option value="completed">Completed</option>
                 </select>
               </td>
-              <td>{projects.find(project => project.id === requirement.projectId)?.name}</td>
-              <td>
+              {/* <td>{projects.find(project => project.id === requirement.projectId)?.name}</td> */}
+              <td className="border px-4 py-2">{requirement.attributes.Project}</td>
+              <td className="border px-4 py-2">{requirement.attributes.Duedate}</td>
+              {/* <td>
                 <button>Edit</button>
                 <button>Delete</button>
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>

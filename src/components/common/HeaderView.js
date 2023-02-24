@@ -16,7 +16,7 @@ const HeaderView = () => {
               </li>
               <li className="mr-6">
                 <NavLink to={RouteNames.CreateTask} className="text-gray-100 hover:text-gray-300">
-                    Create Task
+                    Create Project
                 </NavLink>
               </li>
               <li className="mr-6">

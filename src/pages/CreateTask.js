@@ -1,21 +1,45 @@
 import React, { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+
 
 const CreateTask = () => {
+
+    const navigate = useNavigate();
+
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [coverImage, setCoverImage] = useState('');
     const [dueDate, setDueDate] = useState('');
     const [status, setStatus] = useState('pending');
     const [project, setProject] = useState('');
-  
+
+    
     const handleSubmit = (event) => {
       event.preventDefault();
       // Send form data to backend here
+   const formData = new FormData();
+      formData.append("files.Coverimage", coverImage);     
+      formData.append("data", JSON.stringify({Title:title, Content:content, Duedate:dueDate, Status:status, Project:project}))
+
+      axios
+        .post('http://localhost:1337/api/tasks',formData, {
+            'content-type': 'multipart/form-data',
+          })
+        .then(response => {
+            const success = response.data;
+            console.log(success);
+            if(success){
+                navigate('/')
+            } else {
+                console.log("Error");
+            }
+        });
     };
   
     return (
       <div className="max-w-md mx-auto my-8">
-        <h1 className="text-2xl font-bold mb-4">Create Task</h1>
+        <h1 className="text-2xl font-bold mb-4">Create Project</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="title" className="block mb-2 font-bold text-gray-700">Title:</label>
