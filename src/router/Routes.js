@@ -23,6 +23,7 @@ const Routes = () => {
             <Route path={RouteNames.Contact} element={<Contact/>}/>
             <Route path={RouteNames.Registration} element={<Registration/>}/>
             <Route path={RouteNames.Login} element={<Login/>}/>
+            <Route path={RouteNames.Register} element={<Registration/>}/>
         </AppRoutes>
         <FooterView/>
     </div>

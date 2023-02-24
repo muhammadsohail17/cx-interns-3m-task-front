@@ -5,10 +5,13 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { Common} from '../../../utils/common';
 import { messages } from '../../../utils/messages';
+import { useAuthContext } from '../../ContextApi';
 
 const Login = () => {
     
     const navigate = useNavigate();
+    const {setAuth} = useAuthContext();
+
     const initialValues = {
         email: "",
         password: "",
@@ -23,11 +26,12 @@ const Login = () => {
     
       const onSubmit = (values) => {
         axios
-        .post('http://localhost:1337/api/logins',{
-          data : {Email:values.email, Password:values.password}
+        .post('http://localhost:1337/api/auth/local',{
+          identifier:values.email, password:values.password
         })
         .then(response => {
             const success = response.data;
+            setAuth(response.data.jwt);
           if(success){
               navigate('/')
           } else {

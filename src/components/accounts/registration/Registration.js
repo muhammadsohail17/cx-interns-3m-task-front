@@ -3,9 +3,11 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../../ContextApi";
 
 function Registration() {
     const navigate = useNavigate();
+    const {setAuth} = useAuthContext();
     
     const initialValues = {
     name: "",
@@ -26,11 +28,12 @@ function Registration() {
   const onSubmit = (values) => {
     console.log(values);
     axios
-  .post('http://localhost:1337/api/registers',{
-    data : {Name:values.name, Email:values.email, Password:values.password}
+  .post('http://localhost:1337/api/auth/local/register',{
+   username:values.name, email:values.email, password:values.password
   })
   .then(response => {
     console.log(response);
+    setAuth(response.data.jwt);
     navigate('/')
   })
   .catch(error => {

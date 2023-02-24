@@ -3,5 +3,6 @@ export const RouteNames = {
     CreateTask:'/createtask',
     Contact:'/contact',
     Registration:'/registration',
-    Login:'/login'
+    Login:'/login',
+    Register:'register'
 }
