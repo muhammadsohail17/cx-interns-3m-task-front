@@ -1,4 +1,4 @@
-export const requirements = [
+export const requirementsss = [
     {
       id: "requirement1",
       projectId: "project1",
@@ -69,4 +69,17 @@ export const requirements = [
       description: "Sed do eiusmod tempor incididunt",
       status: "pending",
     },
+  ];
+
+ export const projects = [
+    { id: 1, name: 'Project A' },
+    { id: 2, name: 'Project B' },
+    { id: 3, name: 'Project C' }
+  ];
+  
+ export const requirementForProject = [
+    { id: 1, name: 'Requirement 1', projectId: 1 },
+    { id: 2, name: 'Requirement 2', projectId: 1 },
+    { id: 3, name: 'Requirement 3', projectId: 2 },
+    { id: 4, name: 'Requirement 4', projectId: 3 }
   ];

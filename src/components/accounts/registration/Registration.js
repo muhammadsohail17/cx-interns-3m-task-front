@@ -26,13 +26,11 @@ function Registration() {
   });
 
   const onSubmit = (values) => {
-    console.log(values);
     axios
   .post('http://localhost:1337/api/auth/local/register',{
    username:values.name, email:values.email, password:values.password
   })
   .then(response => {
-    console.log(response);
     setAuth(response.data.jwt);
     navigate('/')
   })

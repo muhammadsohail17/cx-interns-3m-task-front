@@ -35,7 +35,7 @@ const Login = () => {
           if(success){
               navigate('/')
           } else {
-            console.log("Error");
+            console.log("Error posting data to API:'");
           }
         })
         .catch(error => {

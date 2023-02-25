@@ -1,44 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,  } from 'react';
+import { useNavigate, useParams  } from "react-router-dom";
 import axios from 'axios';
+import qs from 'qs';
+import { projectList } from '../utils/common';
 
 
 
 const Homepage = () => {
     const [requirements, setRequirements] = useState([]);
-    const [projects, setProjects] = useState([]);
+    // const [projects, setProjects] = useState([]);
+ 
     const [selectedProject, setSelectedProject] = useState('');
     const [data, setData] = useState([]);
   
     // Define initial state for pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [requirementsPerPage] = useState(5);
-  
-    //Load data from API when component mounts
-    useEffect(() => {
+
+    const navigate = useNavigate();
+    let { projectId } = useParams();
+
+    const getData = () => {
+      const query = qs.stringify({
+        filters: {
+          Project: {
+            $contains: selectedProject
+          },
+        },
+      }, {
+        encodeValuesOnly: true, // prettify URL
+      });
+
       axios
-        .get('http://localhost:1337/api/tasks')
+        .get(`http://localhost:1337/api/tasks?${query}`)
         .then(response => {
             const success = response.data.data;
-            setData(success)
-            console.log(success);
+            setData(success);
         })
         .catch(error => {
           console.log('Error fetching data from API:', error);
         })
-    }, []);
+    }
   
-    // Define function to handle status change
-    const handleChangeStatus = (requirementId, newStatus) => {
-      // Update the status of the requirement with the given ID
-      const updatedRequirements = requirements.map(requirement => {
-        if (requirement.id === requirementId) {
-          requirement.status = newStatus;
-        }
-        return requirement;
-      });
+    //Load data from API when component mounts
+    useEffect(() => {
+      getData();
+    }, [selectedProject]);
   
-      setRequirements(updatedRequirements);
-    };
   
     // Define function to handle project selection
     const handleSelectProject = projectId => {
@@ -67,6 +75,43 @@ const Homepage = () => {
       pageNumbers.push(i);
     }
 
+    const handleEdit = (id)=> {
+      navigate(`/update-project/${id}`)
+    }
+
+    const handleDelete = (id) => {
+    axios
+        .delete(`http://localhost:1337/api/tasks/${id}`)
+        .then(response => {
+            const success = response.data;
+            if(success){
+              getData();
+            } else {
+                console.log("Error Updating data:', error");
+            }
+        });
+    }
+
+    const onRowItemClick = (event, requirement) => {
+      navigate('/projectdetails', {data:requirement})
+      
+    }
+
+    const handleSubmit = (data) => {
+
+      axios
+        .put(`http://localhost:1337/api/tasks/${data.id}`,{data: {...data.attributes}},
+        )
+        .then(response => {
+            const success = response.data;
+            if(success){
+              getData();
+            } else {
+                console.log("Error Updating data:', error");
+            }
+        });
+    };
+
     return (
       <>
         <header>
@@ -77,16 +122,16 @@ const Homepage = () => {
   
           {/* Filter by project */}
           <div className='float-right px-10 py-6'>
-            <label htmlFor="projectSelect">Filter by project:</label>
+            <label htmlFor="projectSelect" className='font-bold mx-4'>Filter by project:</label>
             <select
               id="projectSelect"
               value={selectedProject}
               onChange={e => handleSelectProject(e.target.value)}
             >
-              <option value="">All projects</option>
-              {projects.map(project => (
-                <option key={project.id} value={project.id}>
-                  {project.name}
+              <option value="">Select a project</option>
+              {projectList.map(project => (
+                <option key={project} value={project}>
+                  <span className='text-capitalize'>{project}</span>
                 </option>
               ))}
             </select>
@@ -96,23 +141,25 @@ const Homepage = () => {
         <table className="table-auto w-full">
         <thead>
           <tr className="bg-gray-100">
-            <th className="px-4 py-2">ID</th>
-            <th className="px-4 py-2">Title</th>
-            <th className="px-4 py-2">Status</th>
-            <th className="px-4 py-2">Project</th>
-            <th className="px-4 py-2">dueDate</th>
-            {/* <th className="px-4 py-2">Actions</th> */}
+            <th className="border px-4 py-2">ID</th>
+            <th className="border px-4 py-2">Title</th>
+            <th className="border px-4 py-2">Status</th>
+            <th className="border px-4 py-2">Project</th>
+            <th className="border px-4 py-2">Content</th>
+            <th className="border px-4 py-2">DueDate</th>
+            <th className="px-4 py-2">Actions</th>
           </tr>
         </thead>
-        <tbody className="bg-white">
+        <tbody className="bg-white text-center">
           {data.map(requirement => (
-            <tr key={requirement.id}>
+            <tr key={requirement.id} onClick={(event) => onRowItemClick(event, requirement)} >
               <td className="border px-4 py-2">{requirement.id}</td>
               <td className="border px-4 py-2">{requirement.attributes.Title}</td>
               <td className="border px-4 py-2">
                 <select
                   value={requirement.attributes.Status}
-                  onChange={e => handleChangeStatus(requirement.id, e.target.value)}
+                  onClick={(e)=> {e.stopPropagation()}}
+                  onChange={e => handleSubmit({...requirement,attributes:{...requirement.attributes, Status:e.target.value}})}
                 >
                   <option value="pending">Pending</option>
                   <option value="completed">Completed</option>
@@ -120,11 +167,22 @@ const Homepage = () => {
               </td>
               {/* <td>{projects.find(project => project.id === requirement.projectId)?.name}</td> */}
               <td className="border px-4 py-2">{requirement.attributes.Project}</td>
+              <td className="border px-4 py-2">{requirement.attributes.Content}</td>
               <td className="border px-4 py-2">{requirement.attributes.Duedate}</td>
-              {/* <td>
-                <button>Edit</button>
-                <button>Delete</button>
-              </td> */}
+              <td className="border px-4 py-2">
+                <button className="bg-gray-800 hover:text-gray-300 text-gray-100 py-2 px-4 mx-2 rounded"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleEdit(requirement.id);
+                }}
+                >Edit</button>
+                <button className='bg-gray-800 hover:text-gray-300 text-gray-100 py-2 px-4 rounded'
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleDelete(requirement.id);
+                }}
+                >Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>

@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams  } from "react-router-dom";
 import axios from 'axios';
+import { projectList } from '../utils/common';
 
 
 const CreateTask = () => {
 
     const navigate = useNavigate();
+    let { projectId } = useParams();
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -15,27 +17,70 @@ const CreateTask = () => {
     const [project, setProject] = useState('');
 
     
-    const handleSubmit = (event) => {
+    useEffect(()=>{
+        if(projectId){
+            axios
+    .get(`http://localhost:1337/api/tasks/${projectId}`)
+    .then(response => {
+        const responseData = response?.data.data?.attributes;
+        setTitle(responseData?.Title || '');
+        setContent(responseData?.Content || '');
+        setDueDate(responseData?.Duedate || '');
+        setStatus(responseData?.Status || '');
+        setProject(responseData?.Project || '');
+        console.log(responseData);
+    })
+    .catch(error => {
+      console.log('Error fetching data from API:', error);
+    })
+        }
+    },[projectId]);
+
+    
+    const callApi = (formData) => {
+        const apiMethod = projectId ? axios.put : axios.post;
+        const apiEndpoint = projectId ? `http://localhost:1337/api/tasks/${projectId}` : 'http://localhost:1337/api/tasks';
+      
+        return new Promise((resolve, reject) => {
+          apiMethod(apiEndpoint, formData, {
+            'content-type': 'multipart/form-data',
+          })
+            .then((response) => {
+              console.log(response.data);
+              resolve(response.data);
+            })
+            .catch((error) => {
+              console.error(error);
+              reject(new Error('API call failed'));
+            });
+        });
+      };
+
+
+    const handleSubmit = async(event) => {
+
       event.preventDefault();
       // Send form data to backend here
-   const formData = new FormData();
+      const formData = new FormData();
       formData.append("files.Coverimage", coverImage);     
       formData.append("data", JSON.stringify({Title:title, Content:content, Duedate:dueDate, Status:status, Project:project}))
 
-      axios
-        .post('http://localhost:1337/api/tasks',formData, {
-            'content-type': 'multipart/form-data',
-          })
-        .then(response => {
-            const success = response.data;
-            console.log(success);
-            if(success){
-                navigate('/')
-            } else {
-                console.log("Error");
-            }
-        });
+      callApi(formData)
+  .then((response) => {
+    const success = response.data;
+    console.log(success);
+    if(success){
+        navigate('/')
+    } else {
+        console.log("Error");
+    }
+  })
+  .catch((error) => {
+    console.error(error);
+    // Handle API call failure
+  });
     };
+   
   
     return (
       <div className="max-w-md mx-auto my-8">
@@ -71,11 +116,23 @@ const CreateTask = () => {
   
           <div>
             <label htmlFor="project" className="block mb-2 font-bold text-gray-700">Project:</label>
-            <input type="text" id="project" name="project" value={project} onChange={(event) => setProject(event.target.value)} className="block w-full border-gray-400 rounded-lg shadow-sm py-2 px-4 mb-2" />
+            <select
+              id="project"
+              value={project}
+              onChange={e => setProject(e.target.value)}
+              className="block w-full border-gray-400 rounded-lg shadow-sm py-2 px-4 mb-2"
+            >
+              <option value="">Select a project</option>
+              {projectList.map(project => (
+                <option key={project} value={project}>
+                  <span className='text-capitalize'>{project}</span>
+                </option>
+              ))}
+            </select>
           </div>
   
           <div>
-            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create Task</button>
+            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">{`${projectId ? 'Update' : 'Create'}  Task`}</button>
           </div>
         </form>
         </div>
