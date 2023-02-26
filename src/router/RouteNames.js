@@ -1,6 +1,6 @@
 export const RouteNames = {
     HomePage:'/',
-    CreateTask:'/createtask',
+    CreateTask:'/create-task',
     UpdateTask:'/update-project/:projectId',
     Contact:'/contact',
     Registration:'/registration',

@@ -5,8 +5,8 @@ export const projectList = [
   'thrift',
   'Umii',
   'Videvet',
-  'React Project 4',
-  'Node Project 4',
-  'React Project 5',
-  'Node Project 5'
+  'Tcs',
+  'Linkdin',
+  'Redbooth',
+  'Strapi'
 ];

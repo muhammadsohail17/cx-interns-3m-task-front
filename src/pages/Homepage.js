@@ -1,15 +1,14 @@
 import React, { useState, useEffect,  } from 'react';
-import { useNavigate, useParams  } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import qs from 'qs';
 import { projectList } from '../utils/common';
+import { RouteNames } from '../router/RouteNames';
 
 
 
 const Homepage = () => {
-    const [requirements, setRequirements] = useState([]);
-    // const [projects, setProjects] = useState([]);
- 
+    
     const [selectedProject, setSelectedProject] = useState('');
     const [data, setData] = useState([]);
   
@@ -18,7 +17,6 @@ const Homepage = () => {
     const [requirementsPerPage] = useState(5);
 
     const navigate = useNavigate();
-    let { projectId } = useParams();
 
     const getData = () => {
       const query = qs.stringify({
@@ -56,10 +54,12 @@ const Homepage = () => {
   
     // Calculate the index of the last requirement on the current page
     const lastIndex = currentPage * requirementsPerPage;
+    
     // Calculate the index of the first requirement on the current page
     const firstIndex = lastIndex - requirementsPerPage;
+
     // Get the requirements for the current page
-    const currentRequirements = requirements.slice(firstIndex, lastIndex);
+    const currentRequirements = data.slice(firstIndex, lastIndex);
   
     // Filter the requirements by the selected project, if one has been selected
     const filteredRequirements = selectedProject
@@ -67,13 +67,19 @@ const Homepage = () => {
       : currentRequirements;
   
     // Calculate the total number of pages based on the number of requirements and requirements per page
-    const totalPages = Math.ceil(requirements.length / requirementsPerPage);
+    const totalPages = Math.ceil(data.length / requirementsPerPage);
   
     // Define an array of page numbers for pagination
     const pageNumbers = [];
     for (let i = 1; i <= totalPages; i++) {
       pageNumbers.push(i);
-    }
+    };
+
+    //onRowItemClick
+    const onRowItemClick = (requirement) => {
+      navigate(RouteNames.ProjectDetails, {data:requirement})
+      
+    };
 
     const handleEdit = (id)=> {
       navigate(`/update-project/${id}`)
@@ -90,14 +96,9 @@ const Homepage = () => {
                 console.log("Error Updating data:', error");
             }
         });
-    }
+    };
 
-    const onRowItemClick = (event, requirement) => {
-      navigate('/projectdetails', {data:requirement})
-      
-    }
-
-    const handleSubmit = (data) => {
+    const handleChangeStatus = (data) => {
 
       axios
         .put(`http://localhost:1337/api/tasks/${data.id}`,{data: {...data.attributes}},
@@ -115,7 +116,7 @@ const Homepage = () => {
     return (
       <>
         <header>
-          <h1 className="px-4 py-6 font-bold">projects</h1>
+          <h1 className="px-4 py-6 font-bold">Projects</h1>
         </header>
   
         <main>
@@ -159,13 +160,13 @@ const Homepage = () => {
                 <select
                   value={requirement.attributes.Status}
                   onClick={(e)=> {e.stopPropagation()}}
-                  onChange={e => handleSubmit({...requirement,attributes:{...requirement.attributes, Status:e.target.value}})}
+                  onChange={e => handleChangeStatus({...requirement,attributes:{...requirement.attributes, Status:e.target.value}})}
                 >
                   <option value="pending">Pending</option>
                   <option value="completed">Completed</option>
                 </select>
               </td>
-              {/* <td>{projects.find(project => project.id === requirement.projectId)?.name}</td> */}
+              
               <td className="border px-4 py-2">{requirement.attributes.Project}</td>
               <td className="border px-4 py-2">{requirement.attributes.Content}</td>
               <td className="border px-4 py-2">{requirement.attributes.Duedate}</td>

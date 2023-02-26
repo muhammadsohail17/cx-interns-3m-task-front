@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams  } from "react-router-dom";
 import axios from 'axios';
 import { projectList } from '../utils/common';
+import { RouteNames } from '../router/RouteNames';
 
 
 const CreateTask = () => {
@@ -11,7 +12,6 @@ const CreateTask = () => {
 
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [coverImage, setCoverImage] = useState('');
     const [dueDate, setDueDate] = useState('');
     const [status, setStatus] = useState('pending');
     const [project, setProject] = useState('');
@@ -28,7 +28,6 @@ const CreateTask = () => {
         setDueDate(responseData?.Duedate || '');
         setStatus(responseData?.Status || '');
         setProject(responseData?.Project || '');
-        console.log(responseData);
     })
     .catch(error => {
       console.log('Error fetching data from API:', error);
@@ -61,23 +60,20 @@ const CreateTask = () => {
 
       event.preventDefault();
       // Send form data to backend here
-      const formData = new FormData();
-      formData.append("files.Coverimage", coverImage);     
+      const formData = new FormData();    
       formData.append("data", JSON.stringify({Title:title, Content:content, Duedate:dueDate, Status:status, Project:project}))
 
-      callApi(formData)
-  .then((response) => {
+     callApi(formData)
+    .then((response) => {
     const success = response.data;
-    console.log(success);
     if(success){
-        navigate('/')
+        navigate(RouteNames.HomePage)
     } else {
         console.log("Error");
     }
   })
   .catch((error) => {
     console.error(error);
-    // Handle API call failure
   });
     };
    
@@ -94,11 +90,6 @@ const CreateTask = () => {
           <div>
             <label htmlFor="content" className="block mb-2 font-bold text-gray-700">Content:</label>
             <textarea id="content" name="content" value={content} onChange={(event) => setContent(event.target.value)} required className="block w-full border-gray-400 rounded-lg shadow-sm py-2 px-4 mb-2" />
-          </div>
-  
-          <div>
-            <label htmlFor="coverImage" className="block mb-2 font-bold text-gray-700">Cover Image:</label>
-            <input type="file" id="coverImage" name="coverImage" onChange={(event) => setCoverImage(event.target.files[0])} className="block w-full border-gray-400 rounded-lg shadow-sm py-2 px-4 mb-2" />
           </div>
   
           <div>
@@ -132,7 +123,7 @@ const CreateTask = () => {
           </div>
   
           <div>
-            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">{`${projectId ? 'Update' : 'Create'}  Task`}</button>
+            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 my-4 px-4 rounded">{`${projectId ? 'Update' : 'Create'}  Task`}</button>
           </div>
         </form>
         </div>

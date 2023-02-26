@@ -1,5 +1,5 @@
 import React,{ useState } from 'react';
-import { projects,requirementForProject } from '../utils/constants';
+import { projects,requirements } from '../utils/constants';
 
 
 const ProjectDetails = () => {
@@ -9,13 +9,13 @@ const ProjectDetails = () => {
       setSelectedProject(parseInt(event.target.value));
     };
   
-    const filteredRequirements = requirementForProject.filter((requirement) => {
+    const filteredRequirements = requirements.filter((requirement) => {
       return requirement.projectId === selectedProject;
     });
 
   return (
     <div>
-    <label htmlFor="project">Select a project:</label>
+    <label htmlFor="project" className='font-bold mx-4'>Select a project:</label>
     <select id="project" onChange={handleProjectChange}>
       <option value="">Select a project</option>
       {projects.map((project) => (
@@ -25,10 +25,10 @@ const ProjectDetails = () => {
       ))}
     </select>
 
-    <h2>Requirements for {selectedProject ? projects.find((p) => p.id === selectedProject).name : 'selected project'}</h2>
+    <h2 className='font-medium mx-4 my-6'>Requirements for {selectedProject ? projects.find((p) => p.id === selectedProject).name : 'selected project:'}</h2>
     <ul>
       {filteredRequirements.map((requirement) => (
-        <li key={requirement.id}>{requirement.name}</li>
+        <li key={requirement.id } className='mx-4'>{requirement.name}</li>
       ))}
     </ul>
   </div>
