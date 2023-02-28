@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import axios from 'axios';
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../ContextApi";
 import { messages } from "../../../utils/messages";
 import { RouteNames } from "../../../router/RouteNames";
 
 function Registration() {
-    const navigate = useNavigate();
-    const {setAuth} = useAuthContext();
-    
-    const initialValues = {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const { setAuth } = useAuthContext();
+
+  const initialValues = {
     name: "",
     email: "",
     password: "",
@@ -28,17 +30,22 @@ function Registration() {
   });
 
   const onSubmit = (values) => {
+    setIsLoading(true);
     axios
-  .post('http://localhost:1337/api/auth/local/register',{
-   username:values.name, email:values.email, password:values.password
-  })
-  .then(response => {
-    setAuth(response.data.jwt);
-    navigate(RouteNames.HomePage)
-  })
-  .catch(error => {
-    console.log(messages.showErrorMessage.postData, error);
-  })
+      .post("http://localhost:1337/api/auth/local/register", {
+        username: values.name,
+        email: values.email,
+        password: values.password,
+      })
+      .then((response) => {
+        setIsLoading(false);
+        setAuth(response.data.jwt);
+        navigate(RouteNames.HomePage);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.log(messages.showErrorMessage.postData, error);
+      });
   };
 
   return (
@@ -50,7 +57,9 @@ function Registration() {
       >
         {({ errors, touched }) => (
           <Form className="w-full max-w-md">
-            <h2 className="text-xl font-bold text-center mb-6">Create an account</h2>
+            <h2 className="text-xl font-bold text-center mb-6">
+              Create an account
+            </h2>
 
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full px-3 mb-6 md:mb-0">
@@ -128,19 +137,41 @@ function Registration() {
             </div>
 
             <div className="flex items-center justify-between">
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
-            >
-              Sign up
-            </button>
-          </div>
-            </Form>
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                {isLoading ? (
+                  <svg
+                    className="animate-spin h-5 w-5 mr-3"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 016 12H2c0 2.981 1.655 5.597 4 6.975V17zm10-5.291a7.962 7.962 0 01-2 5.291v-1.725c1.345-.378 2.3-1.494 2.4-2.766h-2.4zm-8-3.518v1.725c-1.345.378-2.3 1.494-2.4 2.766h2.4A7.962 7.962 0 016 11.709z"
+                    ></path>
+                  </svg>
+                ) : (
+                  <span>Sign Up</span>
+                )}
+              </button>
+            </div>
+          </Form>
         )}
-        </Formik>
-        </div>
-  )
+      </Formik>
+    </div>
+  );
 }
 
 export default Registration;
-        

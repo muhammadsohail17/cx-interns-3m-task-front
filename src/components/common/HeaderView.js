@@ -17,7 +17,7 @@ const HeaderView = () => {
     <nav className="bg-gray-800 px-4 py-4">
       <div className="container mx-auto flex justify-between items-center">
         <NavLink to={RouteNames.HomePage} className="text-gray-100 font-bold ">
-          <img src={logo} />
+          <img src={logo} alt={logo} />
         </NavLink>
 
         <ul className="flex">
