@@ -4,6 +4,8 @@ import * as Yup from "yup";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../ContextApi";
+import { messages } from "../../../utils/messages";
+import { RouteNames } from "../../../router/RouteNames";
 
 function Registration() {
     const navigate = useNavigate();
@@ -16,13 +18,13 @@ function Registration() {
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
+    name: Yup.string().required(messages.validation.requiredName),
     email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
+      .email(messages.validation.invalidEmail)
+      .required(messages.validation.requiredEmail),
     password: Yup.string()
-      .min(8, "Password must be at least 8 characters")
-      .required("Password is required"),
+      .min(8, messages.validation.minimumPassword)
+      .required(messages.validation.requiredPassword),
   });
 
   const onSubmit = (values) => {
@@ -32,10 +34,10 @@ function Registration() {
   })
   .then(response => {
     setAuth(response.data.jwt);
-    navigate('/')
+    navigate(RouteNames.HomePage)
   })
   .catch(error => {
-    console.log('Error posting data to API:', error);
+    console.log(messages.showErrorMessage.postData, error);
   })
   };
 
