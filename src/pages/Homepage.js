@@ -120,7 +120,7 @@ const Homepage = () => {
         <h1 className="px-4 py-6 font-bold">Projects</h1>
       </header>
 
-      <main>
+      <main className="h-screen">
         {/* Filter by project */}
         <div className="float-right px-10 py-6">
           <label htmlFor="projectSelect" className="font-bold mx-4">

@@ -83,7 +83,7 @@ const CreateTask = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto my-8">
+    <div className="max-w-md mx-auto my-12 h-screen">
       <h1 className="text-2xl font-bold mb-4">Create Project</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
