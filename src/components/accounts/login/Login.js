@@ -7,6 +7,7 @@ import { useAuthContext } from "../../ContextApi";
 import { messages } from "../../../utils/messages";
 import PopUpModel from "../../common/PopUpModel";
 import { endPoints } from "../../../api/endPoints";
+import { RouteNames } from "../../../router/RouteNames";
 
 const { REST_API, HOST_URL } = endPoints;
 
@@ -42,7 +43,7 @@ const Login = () => {
         const success = response.data;
         setAuth(response.data.jwt);
         if (success) {
-          navigate("/");
+          navigate(RouteNames.HomePage);
         } else {
           setIsError(true);
           console.log(messages.showErrorMessage.postData);

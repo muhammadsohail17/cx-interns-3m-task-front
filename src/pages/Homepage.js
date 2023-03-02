@@ -6,6 +6,9 @@ import { projectList } from "../utils/constants";
 import { RouteNames } from "../router/RouteNames";
 import PopUpModel from "../components/common/PopUpModel";
 import { messages } from "../utils/messages";
+import { endPoints } from "../api/endPoints";
+
+const { REST_API, HOST_URL } = endPoints;
 
 const Homepage = () => {
   const [selectedProject, setSelectedProject] = useState("");
@@ -35,7 +38,7 @@ const Homepage = () => {
     );
 
     axios
-      .get(`http://localhost:1337/api/tasks?${query}`)
+      .get(`${HOST_URL}${REST_API.Projects.GetSelectedProject}${query}`)
       .then((response) => {
         const success = response.data.data;
         setData(success);
@@ -93,7 +96,7 @@ const Homepage = () => {
   const handleDelete = (id) => {
     setIsLoading(true);
     axios
-      .delete(`http://localhost:1337/api/tasks/${id}`)
+      .delete(`${HOST_URL}${REST_API.Projects.DeleteProject}${id}`)
       .then((response) => {
         const success = response.data;
         if (success) {
@@ -101,7 +104,7 @@ const Homepage = () => {
           getData();
         } else {
           setIsError(true);
-          console.log("Error Updating data:', error");
+          console.log("Error deleting data:', error");
         }
       })
       .catch((error) => {
@@ -113,7 +116,7 @@ const Homepage = () => {
 
   const handleChangeStatus = (data) => {
     axios
-      .put(`http://localhost:1337/api/tasks/${data.id}`, {
+      .put(`${HOST_URL}${REST_API.Projects.UpdateStatus}${data.id}`, {
         data: { ...data.attributes },
       })
       .then((response) => {

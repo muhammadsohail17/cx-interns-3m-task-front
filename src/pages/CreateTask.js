@@ -5,6 +5,9 @@ import { projectList } from "../utils/constants";
 import { RouteNames } from "../router/RouteNames";
 import PopUpModel from "../components/common/PopUpModel";
 import { messages } from "../utils/messages";
+import { endPoints } from "../api/endPoints";
+
+const { REST_API, HOST_URL } = endPoints;
 
 const CreateTask = () => {
   const [title, setTitle] = useState("");
@@ -23,7 +26,7 @@ const CreateTask = () => {
     if (projectId) {
       setIsLoading(true);
       axios
-        .get(`http://localhost:1337/api/tasks/${projectId}`)
+        .get(`${HOST_URL}${REST_API.Projects.GetProjectDetail}${projectId}`)
         .then((response) => {
           const responseData = response?.data.data?.attributes;
           setTitle(responseData?.Title || "");
@@ -45,8 +48,8 @@ const CreateTask = () => {
   const callApi = (formData) => {
     const apiMethod = projectId ? axios.put : axios.post;
     const apiEndpoint = projectId
-      ? `http://localhost:1337/api/tasks/${projectId}` //update
-      : "http://localhost:1337/api/tasks"; //create a new project
+      ? `${HOST_URL}${REST_API.Projects.UpdateProject}${projectId}` //update
+      : `${HOST_URL}${REST_API.Projects.CreateProject}`; //create a new project
 
     return new Promise((resolve, reject) => {
       apiMethod(apiEndpoint, formData, {

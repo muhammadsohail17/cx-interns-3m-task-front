@@ -7,5 +7,13 @@ export const endPoints = {
       LogIn: "auth/local",
       Register: "auth/local/register",
     },
+    Projects: {
+      CreateProject: "tasks",
+      UpdateProject: "tasks/",
+      GetProjectDetail: "tasks/",
+      DeleteProject: "tasks/",
+      GetSelectedProject: "tasks?",
+      UpdateStatus: "tasks/",
+    },
   },
 };
