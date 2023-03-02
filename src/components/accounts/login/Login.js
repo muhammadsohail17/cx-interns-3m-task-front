@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../ContextApi";
 import { messages } from "../../../utils/messages";
 import PopUpModel from "../../common/PopUpModel";
+import { endPoints } from "../../../api/endPoints";
+
+const { REST_API, HOST_URL } = endPoints;
 
 const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,14 +33,14 @@ const Login = () => {
   const onSubmit = (values) => {
     setIsLoading(true);
     axios
-      .post("http://localhost:1337/api/auth/local", {
+      .post(`${HOST_URL}${REST_API.Account.LogIn}`, {
         identifier: values.email,
         password: values.password,
       })
       .then((response) => {
+        setIsLoading(false);
         const success = response.data;
         setAuth(response.data.jwt);
-        setIsLoading(false);
         if (success) {
           navigate("/");
         } else {

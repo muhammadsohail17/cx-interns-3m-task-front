@@ -7,6 +7,9 @@ import { useAuthContext } from "../../ContextApi";
 import { messages } from "../../../utils/messages";
 import { RouteNames } from "../../../router/RouteNames";
 import PopUpModel from "../../common/PopUpModel";
+import { endPoints } from "../../../api/endPoints";
+
+const { REST_API, HOST_URL } = endPoints;
 
 function Registration() {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +38,7 @@ function Registration() {
   const onSubmit = (values) => {
     setIsLoading(true);
     axios
-      .post("http://localhost:1337/api/auth/local/register", {
+      .post(`${HOST_URL}${REST_API.Account.Register}`, {
         username: values.name,
         email: values.email,
         password: values.password,

@@ -4,10 +4,15 @@ import axios from "axios";
 import qs from "qs";
 import { projectList } from "../utils/constants";
 import { RouteNames } from "../router/RouteNames";
+import PopUpModel from "../components/common/PopUpModel";
+import { messages } from "../utils/messages";
 
 const Homepage = () => {
   const [selectedProject, setSelectedProject] = useState("");
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   // Define initial state for pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -86,17 +91,24 @@ const Homepage = () => {
   };
 
   const handleDelete = (id) => {
+    setIsLoading(true);
     axios
       .delete(`http://localhost:1337/api/tasks/${id}`)
       .then((response) => {
         const success = response.data;
         if (success) {
+          setIsLoading(false);
           getData();
         } else {
+          setIsError(true);
           console.log("Error Updating data:', error");
         }
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        setIsLoading(false);
+        setIsError(true);
+        console.log(error);
+      });
   };
 
   const handleChangeStatus = (data) => {
@@ -113,6 +125,9 @@ const Homepage = () => {
         }
       });
   };
+
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
 
   return (
     <>
@@ -150,7 +165,7 @@ const Homepage = () => {
               <th className="border px-4 py-2">Project</th>
               <th className="border px-4 py-2">Content</th>
               <th className="border px-4 py-2">DueDate</th>
-              <th className="px-4 py-2">Actions</th>
+              <th className="border px-4 py-2">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white text-center">
@@ -207,10 +222,34 @@ const Homepage = () => {
                     className="bg-gray-800 hover:text-gray-300 text-gray-100 py-2 px-4 rounded"
                     onClick={(e) => {
                       e.stopPropagation();
+                      openModal();
                       handleDelete(requirement.id);
                     }}
                   >
-                    Delete
+                    {isLoading ? (
+                      <svg
+                        className="animate-spin h-5 w-5 mr-3"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 016 12H2c0 2.981 1.655 5.597 4 6.975V17zm10-5.291a7.962 7.962 0 01-2 5.291v-1.725c1.345-.378 2.3-1.494 2.4-2.766h-2.4zm-8-3.518v1.725c-1.345.378-2.3 1.494-2.4 2.766h2.4A7.962 7.962 0 016 11.709z"
+                        ></path>
+                      </svg>
+                    ) : (
+                      <span>Delete</span>
+                    )}
                   </button>
                 </td>
               </tr>
@@ -246,6 +285,15 @@ const Homepage = () => {
           </p>
         </div>
       </main>
+      {/*Pop-up modal*/}
+      {isError && (
+        <PopUpModel
+          isOpen={isOpen}
+          closeModal={closeModal}
+          title={"Delete Project"}
+          text={messages.showErrorMessage.errorBadRequest}
+        />
+      )}
     </>
   );
 };

@@ -11,5 +11,10 @@ export const messages = {
   showErrorMessage: {
     networkError: "Network Error",
     postData: "Error posting data to API:",
+    errorBadRequest: "Request failed with status code 405",
+  },
+  showSuccessMessage: {
+    createData: "Created Successfully",
+    updated: "Updated successfully",
   },
 };
