@@ -15,6 +15,7 @@ const CreateTask = () => {
   const [dueDate, setDueDate] = useState("");
   const [status, setStatus] = useState("pending");
   const [project, setProject] = useState("");
+  const [requirements, setRequirements] = useState([""]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +35,7 @@ const CreateTask = () => {
           setDueDate(responseData?.Duedate || "");
           setStatus(responseData?.Status || "");
           setProject(responseData?.Project || "");
+          setRequirements(responseData?.Requirements || "");
           setIsLoading(false);
           setIsError(false);
         })
@@ -56,6 +58,7 @@ const CreateTask = () => {
         "content-type": "multipart/form-data",
       })
         .then((response) => {
+          console.log(response, "response");
           resolve(response.data);
           setIsLoading(false);
           setIsError(false);
@@ -83,6 +86,7 @@ const CreateTask = () => {
         Duedate: dueDate,
         Status: status,
         Project: project,
+        Requirements: requirements,
       })
     );
 
@@ -101,6 +105,12 @@ const CreateTask = () => {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const handleInputChange = (event, index) => {
+    const newInputValues = [...requirements];
+    newInputValues[index] = event.target.value;
+    setRequirements(newInputValues);
   };
 
   const openModal = () => setIsOpen(true);
@@ -144,6 +154,25 @@ const CreateTask = () => {
               required
               className="block w-full border-gray-400 rounded-lg shadow-sm py-2 px-4 mb-2"
             />
+          </div>
+          <div>
+            <label
+              htmlFor="requirements"
+              className="block mb-2 font-bold text-gray-700"
+            >
+              Requirements:
+            </label>
+            {requirements.map((value, index) => (
+              <input
+                key={index}
+                type="text"
+                id="requirements"
+                name="requirements"
+                value={requirements}
+                onChange={(event) => handleInputChange(event, index)}
+                className="block w-full border-gray-400 rounded-lg shadow-sm py-2 px-4 mb-2"
+              />
+            ))}
           </div>
 
           <div>

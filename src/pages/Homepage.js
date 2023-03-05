@@ -40,11 +40,12 @@ const Homepage = () => {
     axios
       .get(`${HOST_URL}${REST_API.Projects.GetSelectedProject}${query}`)
       .then((response) => {
+        console.log(response, "response");
         const success = response.data.data;
         setData(success);
       })
       .catch((error) => {
-        console.log("Error fetching data from API:", error);
+        console.log(error.response.data);
       });
   };
 
@@ -91,6 +92,10 @@ const Homepage = () => {
 
   const handleEdit = (id) => {
     navigate(`/update-project/${id}`);
+  };
+  const handleRequirement = (id) => {
+    navigate(`/project-requirements/${id}`);
+    console.log(id);
   };
 
   const handleDelete = (id) => {
@@ -175,7 +180,10 @@ const Homepage = () => {
             {data.map((requirement) => (
               <tr
                 key={requirement.id}
-                onClick={(event) => onRowItemClick(event, requirement)}
+                onClick={(event) => {
+                  onRowItemClick(event, requirement);
+                  handleRequirement(requirement.id);
+                }}
               >
                 <td className="border px-4 py-2">{requirement.id}</td>
                 <td className="border px-4 py-2">

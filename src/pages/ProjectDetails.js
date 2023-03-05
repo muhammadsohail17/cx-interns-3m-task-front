@@ -1,38 +1,44 @@
-import React,{ useState } from 'react';
-import { projects,requirements } from '../utils/constants';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { endPoints } from "../api/endPoints";
 
+const { REST_API, HOST_URL } = endPoints;
 
 const ProjectDetails = () => {
-    const [selectedProject, setSelectedProject] = useState(null);
+  const [title, setTitle] = useState("");
+  const [requirements, setRequirements] = useState([]);
 
-    const handleProjectChange = (event) => {
-      setSelectedProject(parseInt(event.target.value));
-    };
-  
-    const filteredRequirements = requirements.filter((requirement) => {
-      return requirement.projectId === selectedProject;
-    });
+  let { projectId } = useParams();
+
+  useEffect(() => {
+    if (projectId) {
+      axios
+        .get(`${HOST_URL}${REST_API.Projects.GetProjectDetail}${projectId}`)
+        .then((response) => {
+          const responseData = response?.data.data?.attributes;
+          setTitle(responseData?.Title || "");
+          setRequirements(responseData?.Requirements || []);
+        })
+        .catch((error) => {
+          console.log("Error fetching data from API:", error);
+        });
+    }
+  }, [projectId]);
+  console.log(requirements, "requirements");
 
   return (
-    <div>
-    <label htmlFor="project" className='font-bold mx-4'>Select a project:</label>
-    <select id="project" onChange={handleProjectChange}>
-      <option value="">Select a project</option>
-      {projects.map((project) => (
-        <option key={project.id} value={project.id}>
-          {project.name}
-        </option>
-      ))}
-    </select>
-
-    <h2 className='font-medium mx-4 my-6'>Requirements for {selectedProject ? projects.find((p) => p.id === selectedProject).name : 'selected project:'}</h2>
-    <ul>
-      {filteredRequirements.map((requirement) => (
-        <li key={requirement.id } className='mx-4'>{requirement.name}</li>
-      ))}
-    </ul>
-  </div>
-  )
-}
+    <div className="container mx-auto py-4 h-screen">
+      <h1 className="text-2xl font-bold mb-4">Requirements</h1>
+      <ul>
+        {requirements.map((requirement, index) => (
+          <li key={index} className="text-lg mb-2">
+            {requirement}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 export default ProjectDetails;
