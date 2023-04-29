@@ -58,7 +58,6 @@ const CreateTask = () => {
         "content-type": "multipart/form-data",
       })
         .then((response) => {
-          console.log(response, "response");
           resolve(response.data);
           setIsLoading(false);
           setIsError(false);
@@ -163,7 +162,7 @@ const CreateTask = () => {
               Requirements:
             </label>
             {requirements.map((value, index) => (
-              <input
+              <textarea
                 key={index}
                 type="text"
                 id="requirements"

@@ -5,6 +5,7 @@ import qs from "qs";
 import { projectList } from "../utils/constants";
 import { RouteNames } from "../router/RouteNames";
 import PopUpModel from "../components/common/PopUpModel";
+import TagsInput from "../components/common/TagsInput";
 import { messages } from "../utils/messages";
 import { endPoints } from "../api/endPoints";
 
@@ -139,9 +140,12 @@ const Homepage = () => {
 
   return (
     <>
+    {/* Header*/}
       <header>
         <h1 className="px-4 py-6 font-bold">Projects</h1>
       </header>
+      {/*tag input*/ }
+      <TagsInput/>
 
       <main className="h-screen">
         {/* Filter by project */}
@@ -180,8 +184,8 @@ const Homepage = () => {
             {data.map((requirement) => (
               <tr
                 key={requirement.id}
-                onClick={(event) => {
-                  onRowItemClick(event, requirement);
+                onClick={() => {
+                  onRowItemClick(requirement);
                   handleRequirement(requirement.id);
                 }}
               >

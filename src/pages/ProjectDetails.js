@@ -6,7 +6,6 @@ import { endPoints } from "../api/endPoints";
 const { REST_API, HOST_URL } = endPoints;
 
 const ProjectDetails = () => {
-  const [title, setTitle] = useState("");
   const [requirements, setRequirements] = useState([]);
 
   let { projectId } = useParams();
@@ -17,7 +16,6 @@ const ProjectDetails = () => {
         .get(`${HOST_URL}${REST_API.Projects.GetProjectDetail}${projectId}`)
         .then((response) => {
           const responseData = response?.data.data?.attributes;
-          setTitle(responseData?.Title || "");
           setRequirements(responseData?.Requirements || []);
         })
         .catch((error) => {
@@ -25,7 +23,6 @@ const ProjectDetails = () => {
         });
     }
   }, [projectId]);
-  console.log(requirements, "requirements");
 
   return (
     <div className="container mx-auto py-4 h-screen">

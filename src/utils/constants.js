@@ -33,3 +33,16 @@ export const projectList = [
   "Redbooth",
   "Strapi",
 ];
+
+export const tagsSugessions = [
+  { full_name: "C++" },
+  { full_name: "Python" },
+  { full_name: "Angular" },
+  { full_name: "React" },
+  { full_name: "Node" },
+  { full_name: "Go" },
+  { full_name: "Ruby" },
+  { full_name: "Swift" },
+  { full_name: "Pearl" },
+  { full_name: "SQL" },
+];
