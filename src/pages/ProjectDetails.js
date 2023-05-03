@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { endPoints } from "../api/endPoints";
+import MessageReaction from "../components/common/MessageReaction";
 
 const { REST_API, HOST_URL } = endPoints;
 
@@ -34,6 +35,7 @@ const ProjectDetails = () => {
           </li>
         ))}
       </ul>
+      <MessageReaction />
     </div>
   );
 };

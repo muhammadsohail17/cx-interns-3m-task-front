@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTag } from "@fortawesome/free-solid-svg-icons";
-import { tagsSugessions } from "../../utils/constants";
+import { tagsSuggessions } from "../../utils/constants";
 
 const TagsInput = () => {
   //define states
@@ -15,7 +15,7 @@ const TagsInput = () => {
 
     if (!value.trim()) return;
     // check if the selected value is a suggested tag
-    const selectedTag = tagsSugessions.find((tag) => tag.full_name === value);
+    const selectedTag = tagsSuggessions.find((tag) => tag.full_name === value);
     if (selectedTag) {
       // add the suggested tag to the tags list
       setTags([...tags, selectedTag.full_name]);
@@ -42,7 +42,7 @@ const TagsInput = () => {
     setShowDropdown(false);
   };
 
-  const filteredSuggestions = tagsSugessions.filter((suggestion) =>
+  const filteredSuggestions = tagsSuggessions.filter((suggestion) =>
     suggestion.full_name.toLowerCase().includes(inputValue.toLowerCase())
   );
 

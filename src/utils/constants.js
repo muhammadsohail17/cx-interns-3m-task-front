@@ -1,3 +1,4 @@
+import { FaThumbsUp, FaHeart, FaLaugh } from "react-icons/fa";
 export const projects = [
   { id: 1, name: "cx-project" },
   { id: 2, name: "cx-dashboard" },
@@ -34,7 +35,7 @@ export const projectList = [
   "Strapi",
 ];
 
-export const tagsSugessions = [
+export const tagsSuggessions = [
   { full_name: "C++" },
   { full_name: "Python" },
   { full_name: "Angular" },
@@ -45,4 +46,19 @@ export const tagsSugessions = [
   { full_name: "Swift" },
   { full_name: "Pearl" },
   { full_name: "SQL" },
+];
+
+export const reactions = [
+  {
+    name: "thumbsUp",
+    icon: <FaThumbsUp />,
+  },
+  {
+    name: "heart",
+    icon: <FaHeart />,
+  },
+  {
+    name: "laugh",
+    icon: <FaLaugh />,
+  },
 ];

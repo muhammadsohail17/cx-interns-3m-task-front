@@ -140,12 +140,12 @@ const Homepage = () => {
 
   return (
     <>
-    {/* Header*/}
+      {/* Header*/}
       <header>
         <h1 className="px-4 py-6 font-bold">Projects</h1>
       </header>
-      {/*tag input*/ }
-      <TagsInput/>
+      {/*tag input*/}
+      <TagsInput />
 
       <main className="h-screen">
         {/* Filter by project */}
