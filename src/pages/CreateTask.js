@@ -6,6 +6,7 @@ import { RouteNames } from "../router/RouteNames";
 import PopUpModel from "../components/common/PopUpModel";
 import { messages } from "../utils/messages";
 import { endPoints } from "../api/endPoints";
+import EmojiPicker from "../components/messageReaction/EmojiPicker";
 
 const { REST_API, HOST_URL } = endPoints;
 
@@ -115,6 +116,10 @@ const CreateTask = () => {
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
 
+  const handleAddEmoji = (emoji) => {
+    setTitle(title + emoji);
+  };
+
   return (
     <div className="max-w-md mx-auto my-12 h-screen">
       <>
@@ -136,6 +141,7 @@ const CreateTask = () => {
               required
               className="block w-full border-gray-400 rounded-lg shadow-sm py-2 px-4 mb-2"
             />
+            {title && <EmojiPicker onEmojiSelect={handleAddEmoji} />}
           </div>
 
           <div>

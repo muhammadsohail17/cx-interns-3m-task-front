@@ -41,7 +41,6 @@ const Homepage = () => {
     axios
       .get(`${HOST_URL}${REST_API.Projects.GetSelectedProject}${query}`)
       .then((response) => {
-        console.log(response, "response");
         const success = response.data.data;
         setData(success);
       })
@@ -96,7 +95,6 @@ const Homepage = () => {
   };
   const handleRequirement = (id) => {
     navigate(`/project-requirements/${id}`);
-    console.log(id);
   };
 
   const handleDelete = (id) => {
